@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="geektutu设计goweb框架geegeektutu的七天实现建议gee框架，基于gin框架。  net&#x2F;http提供了基础的Web功能，即监听端口，映射静态路由，解析HTTP报文。一些Web开发中简单的需求并不支持，需要手工实现。   动态路由：例如hello&#x2F;:name，hello&#x2F;*这类的规则。 鉴权：没有分组&#x2F;统一鉴权的能力，需要在每个路由映射的handler中实现。 模板：">
+  <meta name="description" content="geektutu设计goweb框架gee （1,2）及相关学习geektutu的七天实现建议gee框架，基于gin框架。  net&#x2F;http提供了基础的Web功能，即监听端口，映射静态路由，解析HTTP报文。一些Web开发中简单的需求并不支持，需要手工实现。   动态路由：例如hello&#x2F;:name，hello&#x2F;*这类的规则。 鉴权：没有分组&#x2F;统一鉴权的能力，需要在每个路由映射的hand">
 <meta property="og:type" content="article">
 <meta property="og:title" content="设计go的web框架">
 <meta property="og:url" content="http://example.com/2022/05/13/%E8%AE%BE%E8%AE%A1go%E7%9A%84web%E6%A1%86%E6%9E%B6/index.html">
 <meta property="og:site_name" content="Kabuto">
-<meta property="og:description" content="geektutu设计goweb框架geegeektutu的七天实现建议gee框架，基于gin框架。  net&#x2F;http提供了基础的Web功能，即监听端口，映射静态路由，解析HTTP报文。一些Web开发中简单的需求并不支持，需要手工实现。   动态路由：例如hello&#x2F;:name，hello&#x2F;*这类的规则。 鉴权：没有分组&#x2F;统一鉴权的能力，需要在每个路由映射的handler中实现。 模板：">
+<meta property="og:description" content="geektutu设计goweb框架gee （1,2）及相关学习geektutu的七天实现建议gee框架，基于gin框架。  net&#x2F;http提供了基础的Web功能，即监听端口，映射静态路由，解析HTTP报文。一些Web开发中简单的需求并不支持，需要手工实现。   动态路由：例如hello&#x2F;:name，hello&#x2F;*这类的规则。 鉴权：没有分组&#x2F;统一鉴权的能力，需要在每个路由映射的hand">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-05-13T05:50:47.000Z">
-<meta property="article:modified_time" content="2022-05-18T09:31:22.284Z">
+<meta property="article:modified_time" content="2022-05-18T14:44:27.340Z">
 <meta property="article:author" content="Kabuto">
 <meta property="article:tag" content="go">
 <meta name="twitter:card" content="summary">
@@ -196,7 +196,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-05-18 17:31:22" itemprop="dateModified" datetime="2022-05-18T17:31:22+08:00">2022-05-18</time>
+                <time title="Modified: 2022-05-18 22:44:27" itemprop="dateModified" datetime="2022-05-18T22:44:27+08:00">2022-05-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -219,7 +219,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="geektutu设计goweb框架gee"><a href="#geektutu设计goweb框架gee" class="headerlink" title="geektutu设计goweb框架gee"></a>geektutu设计goweb框架gee</h1><p>geektutu的七天实现建议gee框架，基于gin框架。</p>
+        <h1 id="geektutu设计goweb框架gee-（1-2）及相关学习"><a href="#geektutu设计goweb框架gee-（1-2）及相关学习" class="headerlink" title="geektutu设计goweb框架gee （1,2）及相关学习"></a>geektutu设计goweb框架gee （1,2）及相关学习</h1><p>geektutu的七天实现建议gee框架，基于gin框架。</p>
 <blockquote>
 <p><code>net/http</code>提供了基础的Web功能，即监听端口，映射静态路由，解析HTTP报文。一些Web开发中简单的需求并不支持，需要手工实现。</p>
 </blockquote>
@@ -240,7 +240,28 @@
 <p>实现了路由映射表，提供了用户注册静态路由的方法，包装了启动服务的函数。</p>
 <hr>
 <h2 id="2-上下文"><a href="#2-上下文" class="headerlink" title="2 上下文"></a>2 上下文</h2><p> 首先要设计context,进行有效的封装，针对常用场景，能够高效地构造出 HTTP 响应是一个好的框架必须考虑的点。</p>
-<p><code>Context 随着每一个请求的出现而产生，请求的结束而销毁，和当前请求强相关的信息都应由 Context 承载。因此，设计 Context 结构，扩展性和复杂性留在了内部，而对外简化了接口。路由的处理函数，以及将要实现的中间件，参数都统一使用 Context 实例， Context 就像一次会话的百宝箱，可以找到任何东西。</code></p>
+<blockquote>
+<p>Context 随着每一个请求的出现而产生，请求的结束而销毁，和当前请求强相关的信息都应由 Context 承载。因此，设计 Context 结构，扩展性和复杂性留在了内部，而对外简化了接口。路由的处理函数，以及将要实现的中间件，参数都统一使用 Context 实例， Context 就像一次会话的百宝箱，可以找到任何东西。</p>
+</blockquote>
+<hr>
+<p>首先学习下此部分<code>c.Req.URL.Query().Get(key)</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> URL <span class="keyword">struct</span> &#123;</span><br><span class="line">   Scheme      <span class="type">string</span></span><br><span class="line">   Opaque      <span class="type">string</span>    <span class="comment">// encoded opaque data</span></span><br><span class="line">   User        *Userinfo <span class="comment">// username and password information</span></span><br><span class="line">   Host        <span class="type">string</span>    <span class="comment">// host or host:port</span></span><br><span class="line">   Path        <span class="type">string</span>    <span class="comment">// path (relative paths may omit leading slash)</span></span><br><span class="line">   RawPath     <span class="type">string</span>    <span class="comment">// encoded path hint (see EscapedPath method)</span></span><br><span class="line">   ForceQuery  <span class="type">bool</span>      <span class="comment">// append a query (&#x27;?&#x27;) even if RawQuery is empty</span></span><br><span class="line">   RawQuery    <span class="type">string</span>    <span class="comment">// encoded query values, without &#x27;?&#x27;</span></span><br><span class="line">   Fragment    <span class="type">string</span>    <span class="comment">// fragment for references, without &#x27;#&#x27;</span></span><br><span class="line">   RawFragment <span class="type">string</span>    <span class="comment">// encoded fragment hint (see EscapedFragment method)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>了解下http包中的Request的Url变量的结构，如上结构体。对应也有若干个方法，其一为Query方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">func (u *URL) Query() Values &#123;</span><br><span class="line">   v, _ := ParseQuery(u.RawQuery)</span><br><span class="line">   return v</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>让我们深入一下这个ParseQuery.m是一个map<code>type Values map[string][]string</code>。然后传递给下一个函数，这一个函数的作用就是对RawQuery数据进行解析然后复制给m变量并返回。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">func ParseQuery(query string) (Values, error) &#123;</span><br><span class="line">   m := make(Values)</span><br><span class="line">   err := parseQuery(m, query)</span><br><span class="line">   return m, err</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">func parseQuery(m Values, query string) (err error) &#123;</span><br><span class="line">   for query != &quot;&quot; &#123;</span><br><span class="line">      var key string</span><br><span class="line">      key, query, _ = strings.Cut(query, &quot;&amp;&quot;)//返回分隔符前后的字符串</span><br><span class="line">      if strings.Contains(key, &quot;;&quot;) &#123;</span><br><span class="line">         err = fmt.Errorf(&quot;invalid semicolon separator in query&quot;)</span><br><span class="line">         continue</span><br><span class="line">      &#125;</span><br><span class="line">      if key == &quot;&quot; &#123;</span><br><span class="line">         continue</span><br><span class="line">      &#125;</span><br><span class="line">      key, value, _ := strings.Cut(key, &quot;=&quot;)//相同的效果</span><br><span class="line">      key, err1 := QueryUnescape(key)</span><br><span class="line">      if err1 != nil &#123;</span><br><span class="line">         if err == nil &#123;</span><br><span class="line">            err = err1</span><br><span class="line">         &#125;</span><br><span class="line">         continue</span><br><span class="line">      &#125;</span><br><span class="line">      value, err1 = QueryUnescape(value)</span><br><span class="line">      if err1 != nil &#123;</span><br><span class="line">         if err == nil &#123;</span><br><span class="line">            err = err1</span><br><span class="line">         &#125;</span><br><span class="line">         continue</span><br><span class="line">      &#125;</span><br><span class="line">      m[key] = append(m[key], value)//对m进行操作</span><br><span class="line">   &#125;</span><br><span class="line">   return err</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后的Get（key）方法为找到key值对应的[]string数组中的第一个string,因为可能有相同的变量名称不同的变量值。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(v Values)</span></span> Get(key <span class="type">string</span>) <span class="type">string</span> &#123;</span><br><span class="line">   <span class="keyword">if</span> v == <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&quot;&quot;</span></span><br><span class="line">   &#125;</span><br><span class="line">   vs := v[key]</span><br><span class="line">   <span class="keyword">if</span> <span class="built_in">len</span>(vs) == <span class="number">0</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&quot;&quot;</span></span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> vs[<span class="number">0</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>所以就可以用下面方法进行简单封装。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">func (v Values) Get(key string) string &#123;</span><br><span class="line">   if v == nil &#123;</span><br><span class="line">      return &quot;&quot;</span><br><span class="line">   &#125;</span><br><span class="line">   vs := v[key]</span><br><span class="line">   if len(vs) == 0 &#123;</span><br><span class="line">      return &quot;&quot;</span><br><span class="line">   &#125;</span><br><span class="line">   return vs[0]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
 
     </div>
 
@@ -321,7 +342,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#geektutu%E8%AE%BE%E8%AE%A1goweb%E6%A1%86%E6%9E%B6gee"><span class="nav-number">1.</span> <span class="nav-text">geektutu设计goweb框架gee</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-http%E5%9F%BA%E7%A1%80"><span class="nav-number">1.1.</span> <span class="nav-text">1 http基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="nav-number">1.2.</span> <span class="nav-text">2 上下文</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#geektutu%E8%AE%BE%E8%AE%A1goweb%E6%A1%86%E6%9E%B6gee-%EF%BC%881-2%EF%BC%89%E5%8F%8A%E7%9B%B8%E5%85%B3%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.</span> <span class="nav-text">geektutu设计goweb框架gee （1,2）及相关学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-http%E5%9F%BA%E7%A1%80"><span class="nav-number">1.1.</span> <span class="nav-text">1 http基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="nav-number">1.2.</span> <span class="nav-text">2 上下文</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
