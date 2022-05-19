@@ -1,3 +1,6 @@
+.post-toc .nav .nav-child {
+  display: block;
+}
 :root {
   --body-bg-color: #eee;
   --content-bg-color: #fff;
@@ -1172,6 +1175,13 @@ pre .javascript .function {
   margin: 0 auto;
   max-width: 120px;
   padding: 2px;
+  border-radius: 50%;
+}
+.site-author-image {
+  transition: transform 1s ease-out;
+}
+.site-author-image:hover {
+  transform: rotateZ(360deg);
 }
 .site-author-name {
   color: var(--text-color);
@@ -1199,7 +1209,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #ff5ce4;
+  background: #5cff1b;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1340,7 +1350,6 @@ pre .javascript .function {
   line-height: 1.8;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
 }
 .post-toc .nav .nav-child {
   display: none;
