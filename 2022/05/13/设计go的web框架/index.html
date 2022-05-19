@@ -20,20 +20,20 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="go框架设计http和上下文及源码学习geektutu的七天实现建议gee框架，基于gin框架。  net&#x2F;http提供了基础的Web功能，即监听端口，映射静态路由，解析HTTP报文。一些Web开发中简单的需求并不支持，需要手工实现。   动态路由：例如hello&#x2F;:name，hello&#x2F;*这类的规则。  鉴权：没有分组&#x2F;统一鉴权的能力，需要在每个路由映射的handler中实现。  模板">
+  <meta name="description" content="go框架设计http和上下文及源码学习geektutu的七天实现建议gee框架，基于gin框架。  net&#x2F;http提供了基础的Web功能，即监听端口，映射静态路由，解析HTTP报文。一些Web开发中简单的需求并不支持，需要手工实现。   动态路由：例如hello&#x2F;:name，hello&#x2F;*这类的规则。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="设计go的web框架">
 <meta property="og:url" content="http://example.com/2022/05/13/%E8%AE%BE%E8%AE%A1go%E7%9A%84web%E6%A1%86%E6%9E%B6/index.html">
 <meta property="og:site_name" content="Kabuto">
-<meta property="og:description" content="go框架设计http和上下文及源码学习geektutu的七天实现建议gee框架，基于gin框架。  net&#x2F;http提供了基础的Web功能，即监听端口，映射静态路由，解析HTTP报文。一些Web开发中简单的需求并不支持，需要手工实现。   动态路由：例如hello&#x2F;:name，hello&#x2F;*这类的规则。  鉴权：没有分组&#x2F;统一鉴权的能力，需要在每个路由映射的handler中实现。  模板">
+<meta property="og:description" content="go框架设计http和上下文及源码学习geektutu的七天实现建议gee框架，基于gin框架。  net&#x2F;http提供了基础的Web功能，即监听端口，映射静态路由，解析HTTP报文。一些Web开发中简单的需求并不支持，需要手工实现。   动态路由：例如hello&#x2F;:name，hello&#x2F;*这类的规则。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/image/3.png">
+<meta property="og:image" content="http://example.com/2022/05/13/%E8%AE%BE%E8%AE%A1go%E7%9A%84web%E6%A1%86%E6%9E%B6/image-20220519173559741.png">
 <meta property="article:published_time" content="2022-05-13T05:50:47.000Z">
-<meta property="article:modified_time" content="2022-05-19T09:15:55.950Z">
+<meta property="article:modified_time" content="2022-05-19T09:37:53.784Z">
 <meta property="article:author" content="Kabuto">
 <meta property="article:tag" content="go">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/image/3.png">
+<meta name="twitter:image" content="http://example.com/2022/05/13/%E8%AE%BE%E8%AE%A1go%E7%9A%84web%E6%A1%86%E6%9E%B6/image-20220519173559741.png">
 
 <link rel="canonical" href="http://example.com/2022/05/13/%E8%AE%BE%E8%AE%A1go%E7%9A%84web%E6%A1%86%E6%9E%B6/">
 
@@ -198,7 +198,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-05-19 17:15:55" itemprop="dateModified" datetime="2022-05-19T17:15:55+08:00">2022-05-19</time>
+                <time title="Modified: 2022-05-19 17:37:53" itemprop="dateModified" datetime="2022-05-19T17:37:53+08:00">2022-05-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -226,7 +226,7 @@
 <p><code>net/http</code>提供了基础的Web功能，即监听端口，映射静态路由，解析HTTP报文。一些Web开发中简单的需求并不支持，需要手工实现。</p>
 </blockquote>
 <ul>
-<li><p>动态路由：例如<code>hello/:name</code>，<code>hello/*</code>这类的规则。</p>
+<li><p>动态路由：例如<code>hello/:name</code>，<code>hello/*</code>这类的规则。<span id="more"></span></p>
 </li>
 <li><p>鉴权：没有分组&#x2F;统一鉴权的能力，需要在每个路由映射的handler中实现。</p>
 </li>
@@ -307,7 +307,7 @@
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Encoder <span class="keyword">struct</span> &#123;</span><br><span class="line">   w          io.Writer</span><br><span class="line">   err        <span class="type">error</span></span><br><span class="line">   escapeHTML <span class="type">bool</span></span><br><span class="line"></span><br><span class="line">   indentBuf    *bytes.Buffer</span><br><span class="line">   indentPrefix <span class="type">string</span></span><br><span class="line">   indentValue  <span class="type">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>这里geektutu的框架有点小问题。以下是他的源码</p>
-<p><img src="/image/3.png" alt="json"></p>
+<p><img src="/2022/05/13/%E8%AE%BE%E8%AE%A1go%E7%9A%84web%E6%A1%86%E6%9E%B6/image-20220519173559741.png" alt="image-20220519173559741"></p>
 <p>在他的源码中，先进行了Status方法，底层调用了WriterHeader方法，其中的wroteHeader被设置为true,也就是说状态码已经无法进行再次更改了。就如我们之前所说的,http.Error(c.Writer, err.Error(), 500)里面的w.WriteHeader(code)、w.Header().Set()不起作用，而且Encode的源码中也有Write操作</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> _, err = enc.w.Write(b); err != <span class="literal">nil</span> &#123;</span><br><span class="line">   enc.err = err</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
