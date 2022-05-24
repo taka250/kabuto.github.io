@@ -193,7 +193,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-05-24 17:27:44" itemprop="dateModified" datetime="2022-05-24T17:27:44+08:00">2022-05-24</time>
+                <time title="Modified: 2022-05-24 17:35:21" itemprop="dateModified" datetime="2022-05-24T17:35:21+08:00">2022-05-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -222,9 +222,9 @@
 <h2 id="jwt"><a href="#jwt" class="headerlink" title="jwt"></a>jwt</h2><p>JSON Web Token（缩写 JWT）是目前最流行的跨域认证解决方案。</p>
 <p>第一次接触jwt是在寒假的新生赛中，这一次又遇到了，做一次总结和温习。</p>
 <p>传统的session id和载入cookie的扩展性不好，其中一个解决方案就是服务器不保存session，使用jwt,jwt的原理就是服务器认证以后，生成一个 JSON 对象，发回给用户，以后，用户与服务端通信的时候，都要发回这个 JSON 对象。服务器完全只靠这个对象认定用户身份。</p>
-<p><img src="/image-20220524002034720.png" alt="image-20220524002034720"></p>
+<p><img src="/2022/05/23/WriteUp-for-dasctf-MAY-go/image-20220524002034720.png" alt="image-20220524002034720"></p>
 <p>是一个很长的字符串中间用.分成三个部分。分别为头部，负荷和签名。header是一个json对象，其中包含签名的算法和token类型，然后进行base64url加密。payload部分用来存放实际数据，然后base64url加密。signature是对前两部分的签名，防止数据纂改。使用一个密钥以及header指定的签名算法进行加密，如下</p>
-<p><img src="/image-20220524003218087.png" alt="image-20220524003218087"></p>
+<p><img src="/2022/05/23/WriteUp-for-dasctf-MAY-go/image-20220524003218087.png" alt="image-20220524003218087"></p>
 <p>然后将三部分用”.”连接即可。</p>
 <hr>
 <p>base64url和base64的区别</p>
@@ -404,7 +404,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-05-24 17:28:48" itemprop="dateModified" datetime="2022-05-24T17:28:48+08:00">2022-05-24</time>
+                <time title="Modified: 2022-05-24 17:32:07" itemprop="dateModified" datetime="2022-05-24T17:32:07+08:00">2022-05-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
