@@ -162,6 +162,134 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/23/WriteUp-for-dasctf-MAY-go/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/2.png">
+      <meta itemprop="name" content="Kabuto">
+      <meta itemprop="description" content="ctfer">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kabuto">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/23/WriteUp-for-dasctf-MAY-go/" class="post-title-link" itemprop="url">go 的 jwt认证 学习</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-05-23 21:02:31" itemprop="dateCreated datePublished" datetime="2022-05-23T21:02:31+08:00">2022-05-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-05-24 17:27:44" itemprop="dateModified" datetime="2022-05-24T17:27:44+08:00">2022-05-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/wp/" itemprop="url" rel="index"><span itemprop="name">wp</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="go-的-jwt认证-学习"><a href="#go-的-jwt认证-学习" class="headerlink" title="go 的 jwt认证 学习"></a>go 的 jwt认证 学习</h1><blockquote>
+<p>最近一直在学写框架，也涉及到了模板的封装，正好这次题有做到。那么就进行一次jwt的复习和学习go的模板注入。</p>
+</blockquote>
+<h2 id="jwt"><a href="#jwt" class="headerlink" title="jwt"></a>jwt</h2><p>JSON Web Token（缩写 JWT）是目前最流行的跨域认证解决方案。</p>
+<p>第一次接触jwt是在寒假的新生赛中，这一次又遇到了，做一次总结和温习。</p>
+<p>传统的session id和载入cookie的扩展性不好，其中一个解决方案就是服务器不保存session，使用jwt,jwt的原理就是服务器认证以后，生成一个 JSON 对象，发回给用户，以后，用户与服务端通信的时候，都要发回这个 JSON 对象。服务器完全只靠这个对象认定用户身份。</p>
+<p><img src="/image-20220524002034720.png" alt="image-20220524002034720"></p>
+<p>是一个很长的字符串中间用.分成三个部分。分别为头部，负荷和签名。header是一个json对象，其中包含签名的算法和token类型，然后进行base64url加密。payload部分用来存放实际数据，然后base64url加密。signature是对前两部分的签名，防止数据纂改。使用一个密钥以及header指定的签名算法进行加密，如下</p>
+<p><img src="/image-20220524003218087.png" alt="image-20220524003218087"></p>
+<p>然后将三部分用”.”连接即可。</p>
+<hr>
+<p>base64url和base64的区别</p>
+<blockquote>
+<p>前面提到，Header 和 Payload 串型化的算法是 Base64URL。这个算法跟 Base64 算法基本类似，但有一些小的不同。</p>
+<p>JWT 作为一个令牌（token），有些场合可能会放到 URL（比如 api.example.com&#x2F;?token&#x3D;xxx）。Base64 有三个字符<code>+</code>、<code>/</code>和<code>=</code>，在 URL 里面有特殊含义，所以要被替换掉：<code>=</code>被省略、<code>+</code>替换成<code>-</code>，<code>/</code>替换成<code>_</code> 。这就是 Base64URL 算法。</p>
+</blockquote>
+<hr>
+<h2 id="f-go-题目"><a href="#f-go-题目" class="headerlink" title="f*** go 题目"></a>f*** go 题目</h2><h3 id="jwt-v3-2-2加密代码"><a href="#jwt-v3-2-2加密代码" class="headerlink" title="jwt v3.2.2加密代码"></a>jwt v3.2.2加密代码</h3><p>我们来看看github.com&#x2F;golang-jwt&#x2F;jwt v3.2.2的使用方法</p>
+<p>生成token的部分，首先新建了一个claims变量，其中继承了jwt包中的标准StandardClaims。 <strong>（jwt.RegisteredClaims  是jwt-go的v4版本新增的，原先是jwt.StandardClaims）</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> AccountClaims <span class="keyword">struct</span> &#123;</span><br><span class="line">   Id       <span class="type">string</span> <span class="string">`json:&quot;id&quot;`</span></span><br><span class="line">   Is_admin <span class="type">bool</span>   <span class="string">`json:&quot;is_admin&quot;`</span></span><br><span class="line">   jwt.StandardClaims</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">jwt_encode</span><span class="params">(id <span class="type">string</span>, is_admin <span class="type">bool</span>)</span></span> (<span class="type">string</span>, <span class="type">error</span>) &#123;</span><br><span class="line">   claims := AccountClaims&#123;</span><br><span class="line">      id, is_admin, jwt.StandardClaims&#123;&#125;,</span><br><span class="line">   &#125;</span><br><span class="line">   token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)</span><br><span class="line">   <span class="keyword">return</span> token.SignedString([]<span class="type">byte</span>(secret_key))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后使用jwt.NewWithClaims方法声明了header的部分和method的部分，返回了一个token结构。，token结构源码中解释的很透彻。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewWithClaims</span><span class="params">(method SigningMethod, claims Claims)</span></span> *Token &#123;</span><br><span class="line">   <span class="keyword">return</span> &amp;Token&#123;</span><br><span class="line">      Header: <span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;</span><br><span class="line">         <span class="string">&quot;typ&quot;</span>: <span class="string">&quot;JWT&quot;</span>,</span><br><span class="line">         <span class="string">&quot;alg&quot;</span>: method.Alg(),</span><br><span class="line">      &#125;,</span><br><span class="line">      Claims: claims,</span><br><span class="line">      Method: method,</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// A JWT Token.  Different fields will be used depending on whether you&#x27;re</span></span><br><span class="line"><span class="comment">// creating or parsing/verifying a token.</span></span><br><span class="line"><span class="keyword">type</span> Token <span class="keyword">struct</span> &#123;</span><br><span class="line">   Raw       <span class="type">string</span>                 <span class="comment">// The raw token.  Populated when you Parse a token</span></span><br><span class="line">   Method    SigningMethod          <span class="comment">// The signing method used or to be used</span></span><br><span class="line">   Header    <span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125; <span class="comment">// The first segment of the token</span></span><br><span class="line">   Claims    Claims                 <span class="comment">// The second segment of the token</span></span><br><span class="line">   Signature <span class="type">string</span>                 <span class="comment">// The third segment of the token.  Populated when you Parse a token</span></span><br><span class="line">   Valid     <span class="type">bool</span>                   <span class="comment">// Is the token valid?  Populated when you Parse/Verify a token</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>还差最后一部分就是签名，具体的流程就是首先通过t.SigningString()方法将header和claims变为json格式后进行base64url加密，最后通过dot相连。</p>
+<p>最后<code> t.Method.Sign(sstr, key);</code>通过密钥加密再和其相连。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Get the complete, signed token</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(t *Token)</span></span> SignedString(key <span class="keyword">interface</span>&#123;&#125;) (<span class="type">string</span>, <span class="type">error</span>) &#123;</span><br><span class="line">   <span class="keyword">var</span> sig, sstr <span class="type">string</span></span><br><span class="line">   <span class="keyword">var</span> err <span class="type">error</span></span><br><span class="line">   <span class="keyword">if</span> sstr, err = t.SigningString(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">if</span> sig, err = t.Method.Sign(sstr, key); err != <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> strings.Join([]<span class="type">string</span>&#123;sstr, sig&#125;, <span class="string">&quot;.&quot;</span>), <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Generate the signing string.  This is the</span></span><br><span class="line"><span class="comment">// most expensive part of the whole deal.  Unless you</span></span><br><span class="line"><span class="comment">// need this for something special, just go straight for</span></span><br><span class="line"><span class="comment">// the SignedString.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(t *Token)</span></span> SigningString() (<span class="type">string</span>, <span class="type">error</span>) &#123;</span><br><span class="line">   <span class="keyword">var</span> err <span class="type">error</span></span><br><span class="line">   parts := <span class="built_in">make</span>([]<span class="type">string</span>, <span class="number">2</span>)</span><br><span class="line">   <span class="keyword">for</span> i := <span class="keyword">range</span> parts &#123;</span><br><span class="line">      <span class="keyword">var</span> jsonValue []<span class="type">byte</span></span><br><span class="line">      <span class="keyword">if</span> i == <span class="number">0</span> &#123;</span><br><span class="line">         <span class="keyword">if</span> jsonValue, err = json.Marshal(t.Header); err != <span class="literal">nil</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">         &#125;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">         <span class="keyword">if</span> jsonValue, err = json.Marshal(t.Claims); err != <span class="literal">nil</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">         &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      parts[i] = EncodeSegment(jsonValue)</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> strings.Join(parts, <span class="string">&quot;.&quot;</span>), <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">EncodeSegment</span><span class="params">(seg []<span class="type">byte</span>)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">   <span class="keyword">return</span> base64.RawURLEncoding.EncodeToString(seg)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="jwt-v3-2-2解密代码"><a href="#jwt-v3-2-2解密代码" class="headerlink" title="jwt v3.2.2解密代码"></a>jwt v3.2.2解密代码</h3><p>有加密自然有解密，根据源码的注释,此函数主要就是接受加密后的字符串，claims,和一个回调函数，最终会返回一个token</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// Parse, validate, and return a token.</span><br><span class="line">// keyFunc will receive the parsed token and should return the key for validating.</span><br><span class="line">// If everything is kosher, err will be nil</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">jwt_decode</span><span class="params">(s <span class="type">string</span>)</span></span> (<span class="type">string</span>, <span class="type">bool</span>) &#123;</span><br><span class="line">   token, err := jwt.ParseWithClaims(s, &amp;AccountClaims&#123;&#125;, <span class="function"><span class="keyword">func</span><span class="params">(token *jwt.Token)</span></span> (<span class="keyword">interface</span>&#123;&#125;, <span class="type">error</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> []<span class="type">byte</span>(secret_key), <span class="literal">nil</span></span><br><span class="line">   &#125;)</span><br><span class="line">   <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">      fmt.Println(err)</span><br><span class="line">      <span class="keyword">return</span> <span class="string">&quot;&quot;</span>, <span class="literal">false</span></span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">if</span> claims, ok := token.Claims.(*AccountClaims); ok &amp;&amp; token.Valid &#123;</span><br><span class="line">      <span class="keyword">return</span> claims.Id, claims.Is_admin</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> <span class="string">&quot;&quot;</span>, <span class="literal">false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>具体的代码之后分析。</p>
+<h3 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h3><p><code>func authHandler(c *gin.Context)</code>函数根据post的id和pw验证是否在服务端存有信息。存在就返回加密后的token</p>
+<p><code>func Resist(c *gin.Context)</code>根据post的id和pw在服务端新增一个account 身份不是admin</p>
+<p><code>func flagHandler(c *gin.Context) </code>会解析token看看是不是admin是的话就给出flag</p>
+<p><code>func rootHandler(c *gin.Context)</code>会进行一次模板渲染</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tpl, err := template.New(<span class="string">&quot;&quot;</span>).Parse(<span class="string">&quot;Logged in as &quot;</span> + acc.id)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line">tpl.Execute(c.Writer, &amp;acc)</span><br></pre></td></tr></table></figure>
+
+<p>这么一看这道题就很水了。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Account <span class="keyword">struct</span> &#123; <span class="comment">//帐号信息</span></span><br><span class="line">   id         <span class="type">string</span></span><br><span class="line">   pw         <span class="type">string</span></span><br><span class="line">   is_admin   <span class="type">bool</span></span><br><span class="line">   secret_key <span class="type">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>因为他每次都会把密钥放到每一个帐号里，直接访问密钥字段（或者访问整个变量）就好了。然后用工具构造一个admin jwt就行了。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/20/Write-Up-s-for-HTB-Cyber-Apocalypse-CTF-2022/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -665,7 +793,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -674,7 +802,7 @@
         <span class="site-state-item-name">categories</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
